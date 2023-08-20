@@ -3,18 +3,29 @@
 //Creating first class
 class Department {
     constructor(n) {
-        this.name = 'DEFAULT';
+        this.employees = [];
+        this.name = 'DEFAULT'; //public is the defualt property
         this.name = n;
     }
     describe() {
         console.log(this.name);
     }
+    addEmploy(employee) {
+        this.employees.push(employee);
+    }
+    printEmployessInformations() {
+        console.log(this.employees.length);
+        console.log(this.employees);
+    }
 }
 const accounting = new Department('Accounting');
-console.log(accounting);
+accounting.addEmploy('MAX');
+accounting.addEmploy('SAID');
+//accounting.employees[2] = 'ALAA' if not private, will works
 accounting.describe();
-const accountingCopy = {
-    name: 'DUMMY',
-    describe: accounting.describe,
-};
-accountingCopy.describe();
+accounting.printEmployessInformations();
+/* const accountingCopy = {
+  name: 'DUMMY',
+  describe: accounting.describe,
+}
+accountingCopy.describe() */
