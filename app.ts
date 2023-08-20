@@ -1,35 +1,17 @@
-//OOP
-//Creating first class
+interface Person {
+  name: string
+  age: number
 
-class Department {
-  private employees: string[] = []
-  public name: string = 'DEFAULT' //public is the defualt property
-  constructor(n: string) {
-    this.name = n
-  }
-
-  describe(this: Department) {
-    console.log(this.name)
-  }
-  addEmploy(employee: string) {
-    this.employees.push(employee)
-  }
-  printEmployessInformations() {
-    console.log(this.employees.length)
-    console.log(this.employees)
-  }
+  greet(phrase: string): void
 }
 
-const accounting = new Department('Accounting')
+let user1: Person
 
-accounting.addEmploy('MAX')
-accounting.addEmploy('SAID')
-//accounting.employees[2] = 'ALAA' if not private, will works
-accounting.describe()
-accounting.printEmployessInformations()
-
-/* const accountingCopy = {
-  name: 'DUMMY',
-  describe: accounting.describe,
+user1 = {
+  name: 'SAID',
+  age: 44,
+  greet(phrase: string) {
+    console.log(phrase + '' + user1.name)
+  },
 }
-accountingCopy.describe() */
+user1.greet('Hey there i am ')
