@@ -1,67 +1,76 @@
-const names: Array<string> = ['Said', 'Edaa']
-
-names[1].split('')
-
-const promise: Promise<string> = new Promise((resolve, reject) => {
-  setTimeout(() => {
-    resolve('This is Done')
-  }, 2000)
-})
-
-promise.then((data) => {
-  data.split('')
-})
-
-//Generic functions
-function merge<A extends object, B extends object>(obj1: A, obj2: B) {
-  return Object.assign(obj1, obj2)
-}
-
-const mergeObj = merge({ name: 'Max' }, { age: '30' })
-const mergeObj2 = merge({ name: 'Max', hobbies: ['Sport'] }, { age: '30' })
-console.log(mergeObj.age)
-console.log(mergeObj2)
-
-// Another Generic Function
-
-interface Lengthy {
-  length: number
-}
-function countAndPrint<T extends Lengthy>(element: T) {
-  let descriptionText = 'Got no Value.'
-  if (element.length > 0) descriptionText = 'Got ' + element.length + ' value'
-  return [element, descriptionText]
-}
-
-console.log(countAndPrint('String'))
-
-function extractAndConver<T extends Object, U extends keyof T>(obj: T, key: U) {
-  return obj[key]
-}
-
-console.log(extractAndConver({ name: 'MAX' }, 'name'))
-
-//Generic class
-
-class DateStorage<T> {
-  private data: T[] = []
-  addItem(item: T) {
-    this.data.push(item)
-  }
-  removeItem(item: T) {
-    this.data.splice(this.data.indexOf(item), 1)
-  }
-
-  getItem() {
-    return [...this.data]
+function Logger(logString: string) {
+  return function (target: Function) {
+    console.log(logString)
+    console.log(target)
   }
 }
 
-const textStorage = new DateStorage<string>()
+function WithTemplate(template: string, hookId: string) {
+  return function (_: Function) {
+    console.log('Rendering  template')
+    const hookEl = document.getElementById(hookId)
+    if (hookEl) {
+      hookEl.innerHTML = template
+    }
+  }
+}
 
-textStorage.addItem('SAID')
-textStorage.addItem('MAX')
+@Logger('Logging-Person')
+@WithTemplate('<h1> SAID </h1>', 'app')
+class Person {
+  name = 'John'
+  constructor() {
+    console.log('Creating a Person ...')
+  }
+}
 
-textStorage.removeItem('SAID')
+const pers = new Person()
 
-console.log(textStorage.getItem())
+console.log(pers)
+
+function Log(target: any, propertyName: string) {
+  console.log('Property decorator!')
+  console.log(target, propertyName)
+}
+
+function Log2(
+  target: any,
+  propertyName: string,
+  discriptor: PropertyDecorator
+) {
+  console.log('Property decorator 2')
+  console.log(target, propertyName)
+  console.log(discriptor)
+}
+
+function Log3(
+  target: any,
+  propertyName: string,
+  discriptor: PropertyDescriptor
+) {
+  console.log('Methode decorator 2')
+  console.log(target, propertyName)
+  console.log(discriptor)
+}
+
+class Product {
+  @Log
+  title: string
+  price: number
+  @Log2
+  set priceVal(val: number) {
+    if (val > 0) {
+      this.price = val
+    } else {
+      throw new Error('Invalid price - should be positive')
+    }
+  }
+  constructor(t: string, p: number) {
+    this.title = t
+    this.price = p
+  }
+  @Log3
+  getPriceWithTax(tax: number) {
+    return this.price * (1 + tax)
+  }
+}

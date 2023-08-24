@@ -1,50 +1,74 @@
 "use strict";
-const names = ['Said', 'Edaa'];
-names[1].split('');
-const promise = new Promise((resolve, reject) => {
-    setTimeout(() => {
-        resolve('This is Done');
-    }, 2000);
-});
-promise.then((data) => {
-    data.split('');
-});
-//Generic functions
-function merge(obj1, obj2) {
-    return Object.assign(obj1, obj2);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+function Logger(logString) {
+    return function (target) {
+        console.log(logString);
+        console.log(target);
+    };
 }
-const mergeObj = merge({ name: 'Max' }, { age: '30' });
-const mergeObj2 = merge({ name: 'Max', hobbies: ['Sport'] }, { age: '30' });
-console.log(mergeObj.age);
-console.log(mergeObj2);
-function countAndPrint(element) {
-    let descriptionText = 'Got no Value.';
-    if (element.length > 0)
-        descriptionText = 'Got ' + element.length + ' value';
-    return [element, descriptionText];
+function WithTemplate(template, hookId) {
+    return function (_) {
+        console.log('Rendering  template');
+        const hookEl = document.getElementById(hookId);
+        if (hookEl) {
+            hookEl.innerHTML = template;
+        }
+    };
 }
-console.log(countAndPrint('String'));
-function extractAndConver(obj, key) {
-    return obj[key];
-}
-console.log(extractAndConver({ name: 'MAX' }, 'name'));
-//Generic class
-class DateStorage {
+let Person = class Person {
     constructor() {
-        this.data = [];
+        this.name = 'John';
+        console.log('Creating a Person ...');
     }
-    addItem(item) {
-        this.data.push(item);
+};
+Person = __decorate([
+    Logger('Logging-Person'),
+    WithTemplate('<h1> SAID </h1>', 'app')
+], Person);
+const pers = new Person();
+console.log(pers);
+function Log(target, propertyName) {
+    console.log('Property decorator!');
+    console.log(target, propertyName);
+}
+function Log2(target, propertyName, discriptor) {
+    console.log('Property decorator 2');
+    console.log(target, propertyName);
+    console.log(discriptor);
+}
+function Log3(target, propertyName, discriptor) {
+    console.log('Methode decorator 2');
+    console.log(target, propertyName);
+    console.log(discriptor);
+}
+class Product {
+    set priceVal(val) {
+        if (val > 0) {
+            this.price = val;
+        }
+        else {
+            throw new Error('Invalid price - should be positive');
+        }
     }
-    removeItem(item) {
-        this.data.splice(this.data.indexOf(item), 1);
+    constructor(t, p) {
+        this.title = t;
+        this.price = p;
     }
-    getItem() {
-        return [...this.data];
+    getPriceWithTax(tax) {
+        return this.price * (1 + tax);
     }
 }
-const textStorage = new DateStorage();
-textStorage.addItem('SAID');
-textStorage.addItem('MAX');
-textStorage.removeItem('SAID');
-console.log(textStorage.getItem());
+__decorate([
+    Log
+], Product.prototype, "title", void 0);
+__decorate([
+    Log2
+], Product.prototype, "priceVal", null);
+__decorate([
+    Log3
+], Product.prototype, "getPriceWithTax", null);
